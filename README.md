@@ -22,7 +22,7 @@ Outputs all the memory frequencies available, and which one is being used
 
 Will set the core overclock to +5%
 
-	radeonjet get pcie
+	radeonjet get memory-oc
 
-Gets the current PCIe bandwidth
+Gets the memory overclock percentage
 
