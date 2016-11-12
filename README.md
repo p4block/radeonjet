@@ -10,19 +10,19 @@ Currently in development! Syntax may change unexpectedly.
 
 #### Usage examples:
 
-radeonjet get core
+	radeonjet get core
 
-	Will return the current core clock
+Will return the current core clock
 
-radeonjet get memory 
+	radeonjet get memory 
 
-	Outputs all the memory frequencies available, and which one is being used
+Outputs all the memory frequencies available, and which one is being used
 
-radeonjet set core-oc 5
+	radeonjet set core-oc 5
 
-	Will set the core overclock to +5%
+Will set the core overclock to +5%
 
-radeonjet get pcie
+	radeonjet get pcie
 
-	Gets the current PCIe bandwidth
+Gets the current PCIe bandwidth
 
