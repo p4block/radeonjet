@@ -1,0 +1,54 @@
+#!/bin/bash
+
+
+function main {
+
+## CLI ARGUMENTS
+
+case $1 in
+
+	get|--get|-g )
+	parse_get "$@" ;;
+
+	set|--set|-s )
+	parse_set "$@" ;;
+
+	help|--help|-h )
+	print_help "$@" ;;
+
+	*)
+	print_help "$@" ;;
+
+esac
+
+}
+
+function parse_get {
+
+
+	case $2 in
+
+		freq )
+		get_freq;;
+
+		*)
+		print_help;;
+
+	esac
+
+}
+
+function print_help {
+	echo $"Usage: $0 {get|set|help}"
+	exit 1
+}
+
+function get_freq {
+
+	cat /sys/class/drm/card0/device/pp_dpm_sclk | grep -F '*'
+
+}
+
+
+
+main "$@"
