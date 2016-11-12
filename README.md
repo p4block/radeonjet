@@ -7,7 +7,7 @@ Currently in development!
 
 This project aims to become the cli backend for a graphical GPU overclocking tool.
 
-Usage examples:
+## Usage examples:
 
 radeonjet get core
 	Will return the current core clock
