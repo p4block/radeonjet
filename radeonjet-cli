@@ -1,11 +1,12 @@
 #!/bin/bash
 
 CARD_NUMBER=0
+BRAVENESS=20
 CARDPATH="/sys/class/drm/card$CARD_NUMBER/device/"
 
 ACTION=$1
 THING=$2
-PARAMETERS=$3  #and onward, should implement proper arg getting
+PARAMETER=$3  #and onward, should implement proper arg getting
 
 function main {
 
@@ -28,15 +29,24 @@ function main {
 	esac
 }
 
+###############################################################################
+## GET COMMANDS
+
 function parse_get {
 	case $THING in
-		core-clock|core-freq|core )
+		core )
 		get_core_clock ;;
 
-		memory-clock|memory-freq|memory|mem )
+		core-oc )
+		get_core_oc ;;
+
+		mem )
 		get_memory_clock ;;
 
-		pcie|pcie-speed )
+		mem-oc )
+		get_memory_oc ;;
+
+		pcie )
 		get_pcie_speed ;;
 
 		*)
@@ -44,23 +54,8 @@ function parse_get {
 	esac
 }
 
-function parse_set {
-	case $THING in
-		core-clock|core-freq|core )
-		set_core_clock ;;
-
-		memory-clock|memory-freq|memory|mem )
-		set_memory_clock ;;
-
-		*)
-		print_get_help;;
-	esac
-}
-
-
-
 function get_core_clock {
-	if [ "$PARAMETERS" = "table" ]
+	if [ "$PARAMETER" = "table" ]
 	then
 		cat pp_dpm_sclk
 	else
@@ -68,8 +63,16 @@ function get_core_clock {
 	fi
 }
 
+function get_core_oc {
+	cat pp_sclk_od
+}
+
+function get_memory_oc {
+	cat pp_mclk_od
+}
+
 function get_memory_clock {
-	if [ "$PARAMETERS" = "table" ]
+	if [ "$PARAMETER" = "table" ]
 	then
 		cat pp_dpm_mclk
 	else
@@ -78,7 +81,7 @@ function get_memory_clock {
 }
 
 function get_pcie_speed {
-	if [ "$PARAMETERS" = "table" ]
+	if [ "$PARAMETER" = "table" ]
 	then
 		cat pp_dpm_pcie
 	else
@@ -86,15 +89,73 @@ function get_pcie_speed {
 	fi
 }
 
+###############################################################################
+## SET COMMANDS
+
+function parse_set {
+
+	case $THING in
+		core-oc )
+		sanitize_oc
+		set_core_oc ;;
+
+		mem-oc )
+		sanitize_oc
+		set_memory_oc ;;
+
+		*)
+		print_set_help;;
+	esac
+}
+
+function set_core_oc {
+	sudo bash -c "echo $PARAMETER > pp_sclk_od"
+}
+
+function set_memory_oc {
+	sudo bash -c "echo $PARAMETER > pp_mclk_od"
+}
+
+
+###############################################################################
+## UTIL COMMANDS
+
+function sanitize_oc {
+
+	case $PARAMETER in
+	''|*[!0-9]*)
+	echo "Not an overclock percentage value"
+	exit 1 ;;
+
+	*)
+	if [ $PARAMETER -gt $BRAVENESS ]
+	then
+		echo "Unsafe overclock percentage value"
+		exit 1
+	fi ;;
+
+	esac
+}
+
+###############################################################################
+## HELP COMMANDS
+
 function print_help {
 	echo $"Usage: $0 {get|set|help}"
 	exit 1
 }
 
 function print_get_help {
-	echo $"Usage: $0 get {core|mem} [table]"
+	echo $"Usage: $0 get {core|mem|core-oc|mem-oc} [table]"
+	exit 1
+}
+
+function print_set_help {
+	echo $"Usage: $0 set {core|mem} {0-$BRAVENESS}"
 	exit 1
 }
 
 ## Runs the main function
 main
+
+
