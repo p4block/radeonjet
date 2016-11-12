@@ -1,13 +1,14 @@
 # radeonjet-cli
+
 A simple AMDGPU overclocking tool for the command line.
 
-Compatible with Tonga, Fiji and Polaris GPUs under Linux 4.8.
+This project aims to become the cli backend for a graphical GPU overclocking tool, while being itself perfectly functional for the cli enthusiast. 
 
-Currently in development!
+Compatible with Tonga, Fiji and Polaris GPUs under Linux 4.8 thanks to the AMDGPU kernel module. 
 
-This project aims to become the cli backend for a graphical GPU overclocking tool.
+Currently in development! Syntax may change unexpectedly.
 
-## Usage examples:
+### Usage examples:
 
 radeonjet get core
 	Will return the current core clock
