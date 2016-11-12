@@ -1,41 +1,89 @@
 #!/bin/bash
 
+CARD_NUMBER=0
+CARDPATH="/sys/class/drm/card$CARD_NUMBER/device/"
+
+ACTION=$1
+THING=$2
+PARAMETERS=$3  #and onward, should implement proper arg getting
 
 function main {
 
-## CLI ARGUMENTS
+	cd $CARDPATH
 
-case $1 in
+	case $ACTION in
 
-	get|--get|-g )
-	parse_get "$@" ;;
+		get )
+		parse_get ;;
 
-	set|--set|-s )
-	parse_set "$@" ;;
+		set )
+		parse_set ;;
 
-	help|--help|-h )
-	print_help "$@" ;;
+		help )
+		print_help ;;
 
-	*)
-	print_help "$@" ;;
+		*)
+		print_help ;;
 
-esac
-
+	esac
 }
 
 function parse_get {
+	case $THING in
+		core-clock|core-freq|core )
+		get_core_clock ;;
 
+		memory-clock|memory-freq|memory|mem )
+		get_memory_clock ;;
 
-	case $2 in
-
-		freq )
-		get_freq;;
+		pcie|pcie-speed )
+		get_pcie_speed ;;
 
 		*)
-		print_help;;
-
+		print_get_help;;
 	esac
+}
 
+function parse_set {
+	case $THING in
+		core-clock|core-freq|core )
+		set_core_clock ;;
+
+		memory-clock|memory-freq|memory|mem )
+		set_memory_clock ;;
+
+		*)
+		print_get_help;;
+	esac
+}
+
+
+
+function get_core_clock {
+	if [ "$PARAMETERS" = "table" ]
+	then
+		cat pp_dpm_sclk
+	else
+		cat pp_dpm_sclk | grep -F '*'
+	fi
+}
+
+function get_memory_clock {
+	if [ "$PARAMETERS" = "table" ]
+	then
+		cat pp_dpm_mclk
+	else
+		cat pp_dpm_mclk | grep -F '*'
+	fi
+}
+
+function get_pcie_speed {
+	if [ "$PARAMETERS" = "table" ]
+	then
+		cat pp_dpm_pcie
+	else
+		cat pp_dpm_pcie | grep -F '*'
+	fi
 }
 
 function print_help {
@@ -43,12 +91,10 @@ function print_help {
 	exit 1
 }
 
-function get_freq {
-
-	cat /sys/class/drm/card0/device/pp_dpm_sclk | grep -F '*'
-
+function print_get_help {
+	echo $"Usage: $0 get {core|mem} [table]"
+	exit 1
 }
 
-
-
-main "$@"
+## Runs the main function
+main
