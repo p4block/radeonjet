@@ -8,6 +8,8 @@ Compatible with Tonga, Fiji and Polaris GPUs under Linux 4.8 thanks to the AMDGP
 
 Currently in development! Syntax may change unexpectedly.
 
+![1](https://i.imgur.com/jsL8uc1.png)
+
 #### Usage examples:
 
 	radeonjet get core
