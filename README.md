@@ -14,7 +14,7 @@ Currently in development! Syntax may change unexpectedly.
 
 Will return the current core clock
 
-	radeonjet get memory 
+	radeonjet get memory table
 
 Outputs all the memory frequencies available, and which one is being used
 
