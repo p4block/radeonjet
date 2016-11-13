@@ -19,6 +19,9 @@ function main {
 
 		set )
 		parse_set ;;
+		
+		reset )
+		reset ;;
 
 		help )
 		print_help ;;
@@ -40,10 +43,10 @@ function parse_get {
 		core-oc )
 		get_core_oc ;;
 
-		mem )
+		mem|memory )
 		get_memory_clock ;;
 
-		mem-oc )
+		mem-oc|memory-oc )
 		get_memory_oc ;;
 
 		pcie )
@@ -97,11 +100,11 @@ function parse_set {
 	case $THING in
 		core-oc )
 		sanitize_oc
-		set_core_oc ;;
+		set_core_oc $PARAMETER ;;
 
-		mem-oc )
+		mem-oc|memory-oc )
 		sanitize_oc
-		set_memory_oc ;;
+		set_memory_oc $PARAMETER ;;
 
 		*)
 		print_set_help;;
@@ -109,11 +112,11 @@ function parse_set {
 }
 
 function set_core_oc {
-	sudo bash -c "echo $PARAMETER > pp_sclk_od"
+	sudo bash -c "echo $1 > pp_sclk_od"
 }
 
 function set_memory_oc {
-	sudo bash -c "echo $PARAMETER > pp_mclk_od"
+	sudo bash -c "echo $1 > pp_mclk_od"
 }
 
 
@@ -137,16 +140,21 @@ function sanitize_oc {
 	esac
 }
 
+function reset {
+	set_core_oc 0
+	set_memory_oc 0
+}
+
 ###############################################################################
 ## HELP COMMANDS
 
 function print_help {
-	echo $"Usage: $0 {get|set|help}"
+	echo $"Usage: $0 {get|set|reset|help}"
 	exit 1
 }
 
 function print_get_help {
-	echo $"Usage: $0 get {core|mem|core-oc|mem-oc} [table]"
+	echo $"Usage: $0 get {core|mem|core-oc|mem-oc|pcie} [table]"
 	exit 1
 }
 
