@@ -159,7 +159,7 @@ function print_get_help {
 }
 
 function print_set_help {
-	echo $"Usage: $0 set {core|mem} {0-$BRAVENESS}"
+	echo $"Usage: $0 set {core-oc|mem-oc} {0-$BRAVENESS}"
 	exit 1
 }
 
