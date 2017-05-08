@@ -4,7 +4,8 @@ A simple AMDGPU overclocking tool for the command line.
 
 This project aims to become the cli backend for a graphical GPU overclocking tool, while being itself perfectly functional for the cli enthusiast.
 
-Compatible with Tonga, Fiji and Polaris GPUs under Linux 4.8 thanks to the AMDGPU kernel module.
+Compatible with Tonga, Fiji and Polaris GPUs under Linux >= 4.8 thanks to the AMDGPU kernel module.
+May work with older GPUs running on the amdgpu driver but YMMV
 
 Currently in development! Syntax may change unexpectedly.
 
